@@ -1,5 +1,6 @@
 [tools]
 task = "latest"
+"go:github.com/haryoiro/oasc" = "latest"
 
 [tasks.build]
 description = "Build the binary"

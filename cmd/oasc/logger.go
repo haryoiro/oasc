@@ -2,52 +2,44 @@ package main
 
 import (
 	"io"
-	"log/slog"
+	"log"
 	"os"
 )
 
 type Logger struct {
-	*slog.Logger
-	debug bool
+	debug  bool
+	logger *log.Logger
 }
 
 func NewLogger(w io.Writer, debug bool) *Logger {
-	level := slog.LevelInfo
-	if debug {
-		level = slog.LevelDebug
-	}
-
-	opts := &slog.HandlerOptions{
-		Level: level,
-	}
-
-	handler := slog.NewTextHandler(w, opts)
 	return &Logger{
-		Logger: slog.New(handler),
 		debug:  debug,
+		logger: log.New(w, "", log.LstdFlags),
 	}
 }
 
 func (l *Logger) Debug(format string, v ...any) {
-	l.Logger.Debug(format, v...)
+	if l.debug {
+		l.logger.Printf("[DEBUG] "+format, v...)
+	}
 }
 
 func (l *Logger) Info(format string, v ...any) {
-	l.Logger.Info(format, v...)
+	l.logger.Printf("[INFO] "+format, v...)
 }
 
 func (l *Logger) Error(format string, v ...any) {
-	l.Logger.Error(format, v...)
+	l.logger.Printf("[ERROR] "+format, v...)
 }
 
 func (l *Logger) Fatal(format string, v ...any) {
-	l.Error(format, v...)
+	l.logger.Printf("[FATAL] "+format, v...)
 	os.Exit(1)
 }
 
 func (l *Logger) With(args ...any) *Logger {
 	return &Logger{
-		Logger: l.Logger.With(args...),
 		debug:  l.debug,
+		logger: log.New(l.logger.Writer(), l.logger.Prefix(), l.logger.Flags()),
 	}
 }
