@@ -19,6 +19,8 @@ jobs:
 
       - name: Set up mise
         uses: jdx/mise-action@v2
+        with:
+          experimental: true
 
       - name: Build and Release
         env:
