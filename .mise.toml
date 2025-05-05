@@ -5,58 +5,50 @@ task = "latest"
 [tasks.build]
 description = "Build the binary"
 sources = ["**/*.go"]
-outputs = ["bin/oasc"]
+outputs = ["dist/oasc_${GOOS}_${GOARCH}${EXT}"]
 run = """
 VERSION=0.1.0
 BUILD_TIME=$(date -u '+%Y-%m-%d_%H:%M:%S')
 GIT_COMMIT=$(git rev-parse --short HEAD)
-LDFLAGS="-X 'main.Version=$VERSION' -X 'main.BuildTime=$BUILD_TIME' -X 'main.GitCommit=$GIT_COMMIT'"
-
-mkdir -p bin
-go build -ldflags "$LDFLAGS" -o bin/oasc ./cmd/oasc
+go build -ldflags="-X main.Version=$VERSION -X main.BuildTime=$BUILD_TIME -X main.GitCommit=$GIT_COMMIT" -o dist/oasc_${GOOS}_${GOARCH}${EXT} ./cmd/oasc
 """
 
 [tasks.build-all]
 description = "Build binaries for all platforms"
 depends = ["clean"]
 run = """
-VERSION=0.1.0
-BUILD_TIME=$(date -u '+%Y-%m-%d_%H:%M:%S')
-GIT_COMMIT=$(git rev-parse --short HEAD)
-LDFLAGS="-X 'main.Version=$VERSION' -X 'main.BuildTime=$BUILD_TIME' -X 'main.GitCommit=$GIT_COMMIT'"
-
-mkdir -p dist
-
-GOOS=darwin GOARCH=amd64 go build -ldflags "$LDFLAGS" -o dist/oasc_darwin_amd64 ./cmd/oasc
-GOOS=darwin GOARCH=arm64 go build -ldflags "$LDFLAGS" -o dist/oasc_darwin_arm64 ./cmd/oasc
-GOOS=linux GOARCH=amd64 go build -ldflags "$LDFLAGS" -o dist/oasc_linux_amd64 ./cmd/oasc
-GOOS=linux GOARCH=arm64 go build -ldflags "$LDFLAGS" -o dist/oasc_linux_arm64 ./cmd/oasc
-GOOS=windows GOARCH=amd64 go build -ldflags "$LDFLAGS" -o dist/oasc_windows_amd64.exe ./cmd/oasc
+GOOS=darwin GOARCH=amd64 EXT= mise run build
+GOOS=darwin GOARCH=arm64 EXT= mise run build
+GOOS=linux GOARCH=amd64 EXT= mise run build
+GOOS=linux GOARCH=arm64 EXT= mise run build
+GOOS=windows GOARCH=amd64 EXT=.exe mise run build
 """
 
 [tasks.test]
 description = "Run tests"
 sources = ["**/*.go"]
-run = "go test -v ./..."
+run = "go test ./... -v"
 
 [tasks.clean]
 description = "Clean build artifacts"
-run = "rm -rf bin/ dist/"
+run = "rm -rf dist/*"
 
 [tasks.install]
 description = "Install the binary"
 depends = ["build"]
-run = "cp bin/oasc /usr/local/bin/"
+run = "go install ./cmd/oasc"
 
 [tasks.release]
 description = "Create release archives"
 depends = ["build-all"]
 run = """
-VERSION=0.1.0
-cd dist
-tar -czf oasc_${VERSION}_darwin_amd64.tar.gz oasc_darwin_amd64
-tar -czf oasc_${VERSION}_darwin_arm64.tar.gz oasc_darwin_arm64
-tar -czf oasc_${VERSION}_linux_amd64.tar.gz oasc_linux_amd64
-tar -czf oasc_${VERSION}_linux_arm64.tar.gz oasc_linux_arm64
-zip oasc_${VERSION}_windows_amd64.zip oasc_windows_amd64.exe
+mise run clean
+mise run build-all
+gh release create v$VERSION --title "Release v$VERSION" --notes "Release v$VERSION" dist/*.tar.gz dist/*.zip
+"""
+
+[tasks.release-tag]
+depends = ["build-all"]
+run = """
+./scripts/release-tag
 """
