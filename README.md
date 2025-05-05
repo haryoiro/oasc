@@ -47,17 +47,6 @@ oasc -f spec1.yaml -f spec2.yaml -o merged.yaml --debug
 - [mise](https://github.com/jdx/mise) for task management
 - [goreleaser](https://goreleaser.com/) for releases
 
-### Creating a Release
-
-1. Update the version in `version.go`
-2. Commit your changes
-3. Create and push a tag:
-   ```bash
-   git tag -a v0.1.0 -m "Release v0.1.0"
-   git push origin v0.1.0
-   ```
-4. GitHub Actions will automatically create a release with binaries for all platforms
-
 ## License
 
 MIT License
