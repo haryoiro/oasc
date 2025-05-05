@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+#MISE description="Create release archives"
+#MISE depends=["build-all"]
+
+mise run clean
+mise run build-all
+gh release create v$VERSION --title "Release v$VERSION" --notes "Release v$VERSION" dist/*.tar.gz dist/*.zip

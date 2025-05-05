@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+#MISE description="Install the binary"
+#MISE depends=["build"]
+
+go install ./cmd/oasc

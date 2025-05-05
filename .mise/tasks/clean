@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+#MISE description="Clean build artifacts"
+
+rm -rf dist/*
