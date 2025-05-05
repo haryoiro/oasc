@@ -4,4 +4,16 @@
 
 mise run clean
 mise run build-all
+
+VERSION=${VERSION:-0.1.0}
+
+cd dist
+tar -czf oasc_${VERSION}_darwin_amd64.tar.gz oasc_darwin_amd64
+tar -czf oasc_${VERSION}_darwin_arm64.tar.gz oasc_darwin_arm64
+tar -czf oasc_${VERSION}_linux_amd64.tar.gz oasc_linux_amd64
+tar -czf oasc_${VERSION}_linux_arm64.tar.gz oasc_linux_arm64
+zip oasc_${VERSION}_windows_amd64.zip oasc_windows_amd64.exe
+
+cd ..
+
 gh release create v$VERSION --title "Release v$VERSION" --notes "Release v$VERSION" dist/*.tar.gz dist/*.zip
