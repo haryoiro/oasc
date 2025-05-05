@@ -1,43 +1,63 @@
-# OASC (OpenAPI Specification Combiner)
+# OASC - OpenAPI Specification Combiner
 
-OpenAPI仕様書をマージするCLIツールです。
+A CLI tool for combining multiple OpenAPI specifications into a single file.
 
-## 特徴
+## Features
 
-- OpenAPI 3.x仕様書のマージをサポート
-- パス、オペレーション、パラメータ、レスポンス、リクエストボディの適切なマージ
-- 重複するパラメータやタグの自動処理
-- バージョン互換性の検証
+- Combines multiple OpenAPI 3.x specifications
+- Supports both YAML and JSON formats
+- Cross-platform support (macOS, Linux, Windows)
+- Debug mode for detailed operation logs
 
-## インストール
+## Installation
+
+### Build from Source
 
 ```bash
+# Install Go 1.24 or later
 go install github.com/haryoiro/oasc@latest
 ```
 
-## 使用方法
+## Usage
 
 ```bash
-# 基本的な使用方法
-oasc -file spec1.yaml -file spec2.yaml -output merged.yaml
+# Basic usage
+oasc -f spec1.yaml -f spec2.yaml -o merged.yaml
 
-# 複数のファイルをマージ
-oasc -file spec1.yaml -file spec2.yaml -file spec3.yaml -output merged.yaml
+# Specify output format
+oasc -f spec1.yaml -f spec2.yaml -o merged.json --format json
 
-# JSON形式で出力
-oasc -file spec1.yaml -file spec2.yaml -output merged.json -format json
+# Enable debug mode
+oasc -f spec1.yaml -f spec2.yaml -o merged.yaml --debug
 ```
 
-### オプション
+### Options
 
-- `-file`, `-f`: 入力ファイル（複数指定可能）
-- `-output`, `-o`: 出力ファイルパス（デフォルト: merged.yaml）
-- `-format`, `-F`: 出力形式（json または yaml）
+- `-f, --file`: Input OpenAPI file paths (can be specified multiple times)
+- `-o, --output`: Output file path (default: merged.yaml)
+- `-F, --format`: Output format (json or yaml)
+- `--debug`: Enable debug logging
+- `--version`: Show version information
 
-## マージルール
+## Development
 
-- パス: 同じパスが存在する場合、HTTPメソッドごとにマージ
-- オペレーション: パラメータ、レスポンス、リクエストボディを適切にマージ
-- パラメータ: 重複するパラメータ名は1つに統合
-- コンポーネント: スキーマ、レスポンス、パラメータなどを適切にマージ
-- タグ: 重複するタグは1つに統合
+### Prerequisites
+
+- Go 1.24 or later
+- [mise](https://github.com/jdx/mise) for task management
+- [goreleaser](https://goreleaser.com/) for releases
+
+### Creating a Release
+
+1. Update the version in `version.go`
+2. Commit your changes
+3. Create and push a tag:
+   ```bash
+   git tag -a v0.1.0 -m "Release v0.1.0"
+   git push origin v0.1.0
+   ```
+4. GitHub Actions will automatically create a release with binaries for all platforms
+
+## License
+
+MIT License

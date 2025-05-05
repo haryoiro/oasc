@@ -2,13 +2,18 @@ package main
 
 import (
 	"fmt"
-	"log"
+	"os"
 	"path/filepath"
 	"strings"
 )
 
 func main() {
 	config := ParseFlags()
+
+	if config.Version {
+		fmt.Printf("oasc version %s (build: %s, commit: %s)\n", Version, BuildTime, GitCommit)
+		return
+	}
 
 	logger := NewLogger(os.Stderr, config.Debug)
 	logger.Debug("Debug mode enabled")

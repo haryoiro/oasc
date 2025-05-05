@@ -1,0 +1,41 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.21'
+
+      - name: Set up mise
+        uses: jdx/mise-action@v1
+
+      - name: Build and Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Get version from tag
+          VERSION=${GITHUB_REF#refs/tags/}
+          VERSION=${VERSION#v}
+
+          # Update version in mise.toml
+          sed -i "s/version = \".*\"/version = \"$VERSION\"/" mise.toml
+
+          # Build release
+          mise run release
+
+          # Create GitHub release
+          gh release create $GITHUB_REF \
+            --title "Release $VERSION" \
+            --notes "Release $VERSION" \
+            dist/*.tar.gz dist/*.zip

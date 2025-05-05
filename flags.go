@@ -10,6 +10,7 @@ type Config struct {
 	OutputPath   string
 	OutputFormat string
 	Debug        bool
+	Version      bool
 }
 
 type multiStringFlag []string
@@ -37,6 +38,7 @@ func ParseFlags() *Config {
 	flag.StringVar(&config.OutputFormat, "F", "", "Output format (shorthand)")
 
 	flag.BoolVar(&config.Debug, "debug", false, "Enable debug logging")
+	flag.BoolVar(&config.Version, "version", false, "Show version information")
 
 	flag.Parse()
 
