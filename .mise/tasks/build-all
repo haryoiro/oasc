@@ -2,8 +2,8 @@
 #MISE description="Build binaries for all platforms"
 #MISE depends=["clean"]
 
-GOOS=darwin GOARCH=amd64 EXT= mise run build
-GOOS=darwin GOARCH=arm64 EXT= mise run build
-GOOS=linux GOARCH=amd64 EXT= mise run build
-GOOS=linux GOARCH=arm64 EXT= mise run build
-GOOS=windows GOARCH=amd64 EXT=.exe mise run build
+VERSION=${VERSION} GOOS=darwin GOARCH=amd64 EXT= mise run build
+VERSION=${VERSION} GOOS=darwin GOARCH=arm64 EXT= mise run build
+VERSION=${VERSION} GOOS=linux GOARCH=amd64 EXT= mise run build
+VERSION=${VERSION} GOOS=linux GOARCH=arm64 EXT= mise run build
+VERSION=${VERSION} GOOS=windows GOARCH=amd64 EXT=.exe mise run build
