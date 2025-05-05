@@ -11,11 +11,21 @@ A CLI tool for combining multiple OpenAPI specifications into a single file.
 
 ## Installation
 
+### Go install
+
+```bash
+# Install specific version
+go install github.com/haryoiro/oasc/cmd/oasc@v0.1.35
+
+# Install latest version
+go install github.com/haryoiro/oasc/cmd/oasc@latest
+```
+
 ### Build from Source
 
 ```bash
 # Install Go 1.24 or later
-go install github.com/haryoiro/oasc@latest
+go install github.com/haryoiro/oasc/cmd/oasc@latest
 ```
 
 ## Usage
@@ -46,6 +56,29 @@ oasc -f spec1.yaml -f spec2.yaml -o merged.yaml --debug
 - Go 1.24 or later
 - [mise](https://github.com/jdx/mise) for task management
 - [goreleaser](https://goreleaser.com/) for releases
+
+### Development Setup
+
+```bash
+# Install mise
+curl https://mise.jdx.dev/install.sh | sh
+
+# Install development tools
+mise install
+
+# Run tests
+mise run test
+```
+
+### Release Process
+
+```bash
+# Create release tag
+mise run release-tag 0.1.35
+
+# Create release
+mise run release
+```
 
 ## License
 
