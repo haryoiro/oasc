@@ -13,7 +13,7 @@ GIT_COMMIT=$(git rev-parse --short HEAD)
 LDFLAGS="-X 'main.Version=$VERSION' -X 'main.BuildTime=$BUILD_TIME' -X 'main.GitCommit=$GIT_COMMIT'"
 
 mkdir -p bin
-go build -ldflags "$LDFLAGS" -o bin/oasc
+go build ./cmd/oasc -ldflags "$LDFLAGS" -o bin/oasc
 """
 
 [tasks.build-all]
@@ -27,11 +27,11 @@ LDFLAGS="-X 'main.Version=$VERSION' -X 'main.BuildTime=$BUILD_TIME' -X 'main.Git
 
 mkdir -p dist
 
-GOOS=darwin GOARCH=amd64 go build -ldflags "$LDFLAGS" -o dist/oasc_darwin_amd64
-GOOS=darwin GOARCH=arm64 go build -ldflags "$LDFLAGS" -o dist/oasc_darwin_arm64
-GOOS=linux GOARCH=amd64 go build -ldflags "$LDFLAGS" -o dist/oasc_linux_amd64
-GOOS=linux GOARCH=arm64 go build -ldflags "$LDFLAGS" -o dist/oasc_linux_arm64
-GOOS=windows GOARCH=amd64 go build -ldflags "$LDFLAGS" -o dist/oasc_windows_amd64.exe
+GOOS=darwin GOARCH=amd64 go build ./cmd/oasc -ldflags "$LDFLAGS" -o dist/oasc_darwin_amd64
+GOOS=darwin GOARCH=arm64 go build ./cmd/oasc -ldflags "$LDFLAGS" -o dist/oasc_darwin_arm64
+GOOS=linux GOARCH=amd64 go build ./cmd/oasc -ldflags "$LDFLAGS" -o dist/oasc_linux_amd64
+GOOS=linux GOARCH=arm64 go build ./cmd/oasc -ldflags "$LDFLAGS" -o dist/oasc_linux_arm64
+GOOS=windows GOARCH=amd64 go build ./cmd/oasc -ldflags "$LDFLAGS" -o dist/oasc_windows_amd64.exe
 """
 
 [tasks.test]
