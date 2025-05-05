@@ -2,8 +2,6 @@
 #MISE description="Create release archives"
 #MISE depends=["build-all"]
 
-VERSION=${VERSION:-0.1.0}
-
 mise run clean
 VERSION=${VERSION} mise run build-all
 

@@ -37,7 +37,7 @@ jobs:
           sed -i "s/version = \".*\"/version = \"$VERSION\"/" .mise.toml
 
           # Build release
-          mise run release
+          VERSION=${VERSION} mise run release
 
           # Create GitHub release
           gh release create $GITHUB_REF \
