@@ -9,19 +9,25 @@ import (
 
 func main() {
 	config := ParseFlags()
+
+	logger := NewLogger(os.Stderr, config.Debug)
+	logger.Debug("Debug mode enabled")
+
 	if len(config.InputFiles) < 2 {
-		log.Fatal("At least two input files must be specified")
+		logger.Fatal("At least two input files must be specified")
 	}
 
+	logger.Debug("Reading first file: %s", config.InputFiles[0])
 	merged, err := ReadFile(config.InputFiles[0])
 	if err != nil {
-		log.Fatalf("Error reading first file: %v", err)
+		logger.Fatal("Error reading first file: %v", err)
 	}
 
 	for i := 1; i < len(config.InputFiles); i++ {
+		logger.Debug("Reading file: %s", config.InputFiles[i])
 		spec, err := ReadFile(config.InputFiles[i])
 		if err != nil {
-			log.Fatalf("Error reading file %s: %v", config.InputFiles[i], err)
+			logger.Fatal("Error reading file %s: %v", config.InputFiles[i], err)
 		}
 		merged = MergeSpecs(merged, spec)
 	}
@@ -35,10 +41,11 @@ func main() {
 		isJSON = outExt == ".json"
 	}
 
+	logger.Debug("Writing output to: %s", config.OutputPath)
 	if err := WriteFile(merged, config.OutputPath, isJSON); err != nil {
-		log.Fatal(err)
+		logger.Fatal("Error writing output file: %v", err)
 	}
 
-	fmt.Printf("Successfully merged %d files to %s in %s format\n",
+	logger.Info("Successfully merged %d files to %s in %s format",
 		len(config.InputFiles), config.OutputPath, map[bool]string{true: "JSON", false: "YAML"}[isJSON])
 }

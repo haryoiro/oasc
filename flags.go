@@ -9,6 +9,7 @@ type Config struct {
 	InputFiles   []string
 	OutputPath   string
 	OutputFormat string
+	Debug        bool
 }
 
 type multiStringFlag []string
@@ -34,6 +35,8 @@ func ParseFlags() *Config {
 
 	flag.StringVar(&config.OutputFormat, "format", "", "Output format (json or yaml)")
 	flag.StringVar(&config.OutputFormat, "F", "", "Output format (shorthand)")
+
+	flag.BoolVar(&config.Debug, "debug", false, "Enable debug logging")
 
 	flag.Parse()
 
