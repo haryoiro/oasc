@@ -1,4 +1,4 @@
-module github.com/haryoiro/oasc/cmd/oasc
+module github.com/haryoiro/oasc
 
 go 1.24.2
 
