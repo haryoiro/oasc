@@ -22,6 +22,8 @@ jobs:
 
       - name: Set up mise
         uses: jdx/mise-action@v2
+        with:
+          experimental: true
 
       - name: Run tests
         run: mise run test
