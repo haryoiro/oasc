@@ -31,8 +31,8 @@ echo $tags
 export PREV_TAG=$(echo "$tags" | grep -v "v$VERSION" | head -n 1)
 
 if [ -z "$PREV_TAG" ]; then
-  echo "Previous tag not found. Skipping release note and GitHub release creation."
   tag_and_push
+  gh release create "v$VERSION" --title "v$VERSION" --notes "Release v$VERSION"
   exit 0
 fi
 
