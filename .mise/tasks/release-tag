@@ -16,9 +16,36 @@ if ! [[ $VERSION =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
   exit 1
 fi
 
+# 前回のタグを取得
+tags=$(git tag --list 'v*' --sort=-v:refname)
+PREV_TAG=$(echo "$tags" | grep -v "v$VERSION" | head -n 1)
+
+if [ -z "$PREV_TAG" ]; then
+  echo "Error: Previous tag not found."
+  exit 1
+fi
+
+# PR一覧取得（マージコミットからPR番号抽出）
+PR_LIST=$(git log --merges --pretty=format:"%s" $PREV_TAG..HEAD | grep -Eo '#[0-9]+' | sort -u)
+
+RELEASE_NOTES="## Merged Pull Requests since $PREV_TAG\n"
+if [ -z "$PR_LIST" ]; then
+  RELEASE_NOTES+="(No pull requests merged)\n"
+else
+  for pr in $PR_LIST; do
+    RELEASE_NOTES+="- $pr\n"
+  done
+fi
+
+# タグ作成&push
 git tag -a "v$VERSION" -m "Release v$VERSION"
 git push --tags
 
 echo "Release tag v$VERSION has been created and pushed."
+
+echo "Creating GitHub release with PR list..."
+
+gh release create "v$VERSION" --title "v$VERSION" --notes "$RELEASE_NOTES"
+
 echo "You can now install this version with:"
 echo "go install github.com/haryoiro/oasc/cmd/oasc@v$VERSION"

@@ -1,0 +1,32 @@
+name: Release Tag
+
+on:
+  push:
+    branches:
+      - 'release/v*.*.*'
+
+jobs:
+  release-tag:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up mise
+        uses: jdx/mise-action@v2
+
+      - name: Set up gh CLI
+        uses: cli/gh-action@v2
+
+      - name: Extract version from branch name
+        id: extract_version
+        run: |
+          BRANCH_NAME="${GITHUB_REF##*/}"
+          VERSION="${BRANCH_NAME#v}"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Run release-tag task
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          mise tasks run release-tag ${{ steps.extract_version.outputs.version }}
