@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 #MISE description="Create release tag"
-#MISE depends=["build-all"]
 
 if [ $# -ne 1 ]; then
   echo "Usage: $0 <version>"
