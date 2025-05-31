@@ -7,7 +7,7 @@ if [ $# -ne 1 ]; then
   exit 1
 fi
 
-VERSION=$1
+export VERSION=$1
 
 # バージョン形式チェック
 if ! [[ $VERSION =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
@@ -16,18 +16,18 @@ if ! [[ $VERSION =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
 fi
 
 # 前回のタグを取得
-tags=$(git tag --list 'v*' --sort=-v:refname)
-PREV_TAG=$(echo "$tags" | grep -v "v$VERSION" | head -n 1)
+export tags=$(git tag --list 'v*' --sort=-v:refname)
+export PREV_TAG=$(echo "$tags" | grep -v "v$VERSION" | head -n 1)
 
 if [ -z "$PREV_TAG" ]; then
   echo "Error: Previous tag not found."
   exit 1
 fi
 
-# PR一覧取得（マージコミットからPR番号抽出）
-PR_LIST=$(git log --merges --pretty=format:"%s" $PREV_TAG..HEAD | grep -Eo '#[0-9]+' | sort -u)
+# # PR一覧取得（マージコミットからPR番号抽出）
+export PR_LIST=$(git log --merges --pretty=format:"%s" $PREV_TAG..HEAD | grep -Eo '#[0-9]+' | sort -u)
 
-RELEASE_NOTES="## Merged Pull Requests since $PREV_TAG\n"
+export RELEASE_NOTES="## Merged Pull Requests since $PREV_TAG\n"
 if [ -z "$PR_LIST" ]; then
   RELEASE_NOTES+="(No pull requests merged)\n"
 else
