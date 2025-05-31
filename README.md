@@ -77,10 +77,6 @@ mise run test
 mise run release-tag 0.1.35
 ```
 
-GitHub Actionsが自動でビルド・リリースを行います。
-
-> バージョン管理はGitのタグのみで行われます。
-
 ## License
 
 MIT License
