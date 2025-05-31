@@ -16,10 +16,6 @@ jobs:
         uses: jdx/mise-action@v2
         with:
           experimental: true
-
-      - name: Set up gh CLI
-        uses: cli/gh-action@v2
-
       - name: Extract version from branch name
         id: extract_version
         run: |
