@@ -17,6 +17,7 @@ fi
 
 # 前回のタグを取得
 export tags=$(git tag --list 'v*' --sort=-v:refname)
+git tag --list 'v*' --sort=-v:refname)
 echo $tags
 export PREV_TAG=$(echo "$tags" | grep -v "v$VERSION" | head -n 1)
 
