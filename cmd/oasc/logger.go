@@ -28,10 +28,6 @@ func (l *Logger) Info(format string, v ...any) {
 	l.logger.Printf("[INFO] "+format, v...)
 }
 
-func (l *Logger) Error(format string, v ...any) {
-	l.logger.Printf("[ERROR] "+format, v...)
-}
-
 func (l *Logger) Fatal(format string, v ...any) {
 	l.logger.Printf("[FATAL] "+format, v...)
 	os.Exit(1)

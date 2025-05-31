@@ -2,7 +2,6 @@
 #MISE description="Create release tag"
 #MISE depends=["build-all"]
 
-# 引数チェック
 if [ $# -ne 1 ]; then
   echo "Usage: $0 <version>"
   echo "Example: $0 0.1.0"
@@ -17,17 +16,6 @@ if ! [[ $VERSION =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
   exit 1
 fi
 
-# バージョン更新
-sed -i '' "s/version = \".*\"/version = \"$VERSION\"/" .mise.toml
-
-# main.goのバージョン更新
-sed -i '' "s/const Version = \".*\"/const Version = \"$VERSION\"/" cmd/oasc/main.go
-
-# 変更をコミット
-git add .mise.toml cmd/oasc/main.go
-git commit -m "chore: prepare release v$VERSION"
-
-# タグの作成とプッシュ
 git tag -a "v$VERSION" -m "Release v$VERSION"
 git push origin "v$VERSION"
 

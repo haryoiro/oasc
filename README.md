@@ -73,12 +73,13 @@ mise run test
 ### Release Process
 
 ```bash
-# Create release tag
+# Create release tag (this will push a tag and trigger GitHub Actions)
 mise run release-tag 0.1.35
-
-# Create release
-mise run release
 ```
+
+GitHub Actionsが自動でビルド・リリースを行います。
+
+> バージョン管理はGitのタグのみで行われます。
 
 ## License
 
