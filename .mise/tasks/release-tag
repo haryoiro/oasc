@@ -17,7 +17,7 @@ if ! [[ $VERSION =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
 fi
 
 git tag -a "v$VERSION" -m "Release v$VERSION"
-git push origin "v$VERSION"
+git push --tags
 
 echo "Release tag v$VERSION has been created and pushed."
 echo "You can now install this version with:"
