@@ -26,6 +26,11 @@ jobs:
           VERSION="${BRANCH_NAME#v}"
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
+      - name: Set git user
+        run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+
       - name: Run release-tag task
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
