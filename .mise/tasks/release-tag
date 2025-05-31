@@ -15,6 +15,15 @@ if ! [[ $VERSION =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
   exit 1
 fi
 
+# タグ作成・push・インストール案内関数
+tag_and_push() {
+  git tag -a "v$VERSION" -m "Release v$VERSION"
+  git push --tags
+  echo "Release tag v$VERSION has been created and pushed."
+  echo "You can now install this version with:"
+  echo "go install github.com/haryoiro/oasc/cmd/oasc@v$VERSION"
+}
+
 # 前回のタグを取得
 export tags=$(git tag --list 'v*' --sort=-v:refname)
 git tag --list 'v*' --sort=-v:refname
@@ -22,8 +31,9 @@ echo $tags
 export PREV_TAG=$(echo "$tags" | grep -v "v$VERSION" | head -n 1)
 
 if [ -z "$PREV_TAG" ]; then
-  echo "Error: Previous tag not found."
-  exit 1
+  echo "Previous tag not found. Skipping release note and GitHub release creation."
+  tag_and_push
+  exit 0
 fi
 
 # # PR一覧取得（マージコミットからPR番号抽出）
@@ -38,15 +48,8 @@ else
   done
 fi
 
-# タグ作成&push
-git tag -a "v$VERSION" -m "Release v$VERSION"
-git push --tags
-
-echo "Release tag v$VERSION has been created and pushed."
+tag_and_push
 
 echo "Creating GitHub release with PR list..."
 
 gh release create "v$VERSION" --title "v$VERSION" --notes "$RELEASE_NOTES"
-
-echo "You can now install this version with:"
-echo "go install github.com/haryoiro/oasc/cmd/oasc@v$VERSION"
